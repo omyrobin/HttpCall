@@ -1,12 +1,8 @@
 package com.dcloud.live.http.interceptor;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.dcloud.live.App;
 import com.dcloud.live.http.config.BuildConfig;
-import com.dcloud.live.http.header.SessionManager;
-import com.dcloud.live.util.NetWorkUtils;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -23,28 +19,24 @@ import okio.Buffer;
  * Created by wubo on 2018/4/9.
  */
 
-public class ClientInterceptor implements Interceptor{
+public class ClientInterceptor implements Interceptor {
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         //请求拦截(头信息添加)
-        Request request = chain.request()
-                .newBuilder()
-                .addHeader(BuildConfig.HEADER_CONTENT_TYPE, "application/json; charset=UTF-8")
-                .addHeader(BuildConfig.HEADER_ACCEPT, "application/json")
-                .build();
+        Request request = chain.request();
         RequestBody requestBody = request.body();
         boolean hasRequestBody = requestBody != null;
         if (hasRequestBody) {
             // Request body headers are only present when installed as a network interceptor. Force
             // them to be included (when available) so there values are known.
             if (requestBody.contentType() != null) {
-                Log.i("Content-Type: " , requestBody.contentType() + "");
+                Log.i("Content-Type: ", requestBody.contentType() + "");
             }
             if (requestBody.contentLength() != -1) {
-                Log.i("Content-Length: " , requestBody.contentLength() + "");
+                Log.i("Content-Length: ", requestBody.contentLength() + "");
             }
         }
 
@@ -59,18 +51,22 @@ public class ClientInterceptor implements Interceptor{
             }
 
             if (isPlaintext(buffer)) {
-                Log.i("请求数据" , buffer.readString(charset));
+                Log.i("请求数据", buffer.readString(charset));
             }
         }
 
+        request.newBuilder()
+                .addHeader(BuildConfig.HEADER_CONTENT_TYPE, "application/json; charset=UTF-8")
+                .addHeader(BuildConfig.HEADER_ACCEPT, "application/json")
+                .build();
         //响应拦截(头信息获取)
         Response response = chain.proceed(request);
         //存入Session
-        if (response.header("Set-Cookie") != null) {
-            SessionManager.setSession(response.header("Set-Cookie"));
-        }
+//        if (response.header("Set-Cookie") != null) {
+//            SessionManager.setSession(response.header("Set-Cookie"));
+//        }
         //刷新API调用时间
-        SessionManager.setLastApiCallTime(System.currentTimeMillis());
+//        SessionManager.setLastApiCallTime(System.currentTimeMillis());
         return response;
     }
 

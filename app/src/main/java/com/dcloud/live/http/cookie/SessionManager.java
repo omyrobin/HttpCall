@@ -1,4 +1,4 @@
-package com.dcloud.live.http.header;
+package com.dcloud.live.http.cookie;
 
 /**
  * Created by wubo on 2018/4/10.

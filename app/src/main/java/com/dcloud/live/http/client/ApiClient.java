@@ -3,14 +3,20 @@ package com.dcloud.live.http.client;
 
 import android.support.annotation.Nullable;
 
+import com.dcloud.live.App;
 import com.dcloud.live.http.config.BuildConfig;
 import com.dcloud.live.http.config.UrlConfig;
+import com.dcloud.live.http.cookie.CookieManger;
 import com.dcloud.live.http.interceptor.ClientInterceptor;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Authenticator;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -57,6 +63,8 @@ public class ApiClient {
                         return null;
                     }
                 });
+                //Cookie持久化
+                builder.cookieJar(new CookieManger(App.getInstance().getApplicationContext()));
                 //错误重连
                 builder.retryOnConnectionFailure(true);
                 CLIENT = builder.build();
