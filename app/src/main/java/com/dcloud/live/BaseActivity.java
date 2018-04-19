@@ -76,8 +76,13 @@ public abstract class BaseActivity<V extends BaseView,T extends BasePresenter<V>
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         presenter.dettach();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 }

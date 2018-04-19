@@ -1,7 +1,9 @@
 package com.dcloud.live.http.cookie;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Cookie;
@@ -30,9 +32,9 @@ public class CookieManger implements CookieJar {
 
     @Override
     public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-        if (cookies != null && cookies.size() > 0) {
-            for (Cookie item : cookies) {
-                cookieStore.add(url, item);
+        if (cookies.size() > 0) {
+            for (Cookie cookie : cookies) {
+                cookieStore.add(url, cookie);
             }
         }
     }
@@ -40,7 +42,7 @@ public class CookieManger implements CookieJar {
     @Override
     public List<Cookie> loadForRequest(HttpUrl url) {
         List<Cookie> cookies = cookieStore.get(url);
-        return cookies;
+        return cookies != null ? cookies : new ArrayList<Cookie>();
     }
 
 }

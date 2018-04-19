@@ -2,14 +2,11 @@ package com.dcloud.live.http.rxjava;
 
 import android.content.Context;
 import android.net.ParseException;
-import android.os.Parcelable;
-import android.util.Log;
 
-import com.dcloud.live.App;
 import com.dcloud.live.R;
 import com.dcloud.live.bean.BaseEntity;
-import com.dcloud.live.http.dialog.ProgressCancelListener;
-import com.dcloud.live.http.dialog.ProgressDialogHandler;
+import com.dcloud.live.http.progress.ProgressCancelListener;
+import com.dcloud.live.http.progress.ProgressDialogHandler;
 import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
@@ -19,7 +16,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import retrofit2.HttpException;
 
 /**
@@ -32,24 +31,28 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
 
     private Context context;
 
-    private Disposable disposable;
-
     private ProgressDialogHandler handler;
+
+    private Disposable disposable;
 
     public ProgressObserver(Context context, SubscriberListener<T> subscriber) {
         this.subscriber = subscriber;
         this.context = context;
+
         handler = new ProgressDialogHandler(context, new ProgressCancelListener() {
             @Override
             public void onCancelProgress() {
-                handler.sendEmptyMessage(ProgressDialogHandler.DISMISS_PROGRESS_DIALOG);
+                //取消订阅
+                if(!disposable.isDisposed()){
+                    disposable.dispose();
+                }
             }
         }, true);
     }
 
     @Override
     public void onSubscribe(Disposable d) {
-        disposable = d;
+        this.disposable = d;
     }
 
     @Override
@@ -82,19 +85,12 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
         } else {
             onException(context, ApiException.UNKNOWN_ERROR);
         }
-
-        handler.sendEmptyMessage(ProgressDialogHandler.DISMISS_PROGRESS_DIALOG);
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
+        dismissDialog();
     }
 
     @Override
     public void onComplete() {
-        handler.sendEmptyMessage(ProgressDialogHandler.DISMISS_PROGRESS_DIALOG);
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
+        dismissDialog();
     }
 
     /**
@@ -137,7 +133,15 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
         }
     }
 
-    public ProgressDialogHandler getHandler() {
-        return handler;
+    public Disposable getDisposable() {
+        return disposable;
+    }
+
+    public void dismissDialog(){
+        handler.sendEmptyMessage(ProgressDialogHandler.DISMISS_PROGRESS_DIALOG);
+    }
+
+    public void showDialog() {
+        handler.sendEmptyMessage(ProgressDialogHandler.SHOW_PROGRESS_DIALOG);
     }
 }

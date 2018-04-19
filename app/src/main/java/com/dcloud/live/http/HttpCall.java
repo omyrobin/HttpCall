@@ -3,7 +3,7 @@ package com.dcloud.live.http;
 import android.os.Parcelable;
 
 import com.dcloud.live.bean.BaseEntity;
-import com.dcloud.live.http.dialog.ProgressDialogHandler;
+import com.dcloud.live.http.progress.ProgressDialogHandler;
 import com.dcloud.live.http.rxjava.ProgressObserver;
 import com.dcloud.live.http.rxjava.ResponseTransformer;
 
@@ -26,7 +26,7 @@ public class HttpCall {
             @Override
             public void accept(Disposable disposable) throws Exception {
                 if (isShowDialog) {
-                    observer.getHandler().sendEmptyMessage(ProgressDialogHandler.SHOW_PROGRESS_DIALOG);
+                    observer.showDialog();
                 }
             }
         }).subscribe(observer);

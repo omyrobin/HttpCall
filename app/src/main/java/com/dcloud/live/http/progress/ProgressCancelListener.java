@@ -1,4 +1,4 @@
-package com.dcloud.live.http.dialog;
+package com.dcloud.live.http.progress;
 
 /**
  * Created by wubo on 2018/4/12.

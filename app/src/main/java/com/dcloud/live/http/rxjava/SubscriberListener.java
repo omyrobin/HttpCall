@@ -1,12 +1,5 @@
 package com.dcloud.live.http.rxjava;
 
-/**
- * The interface Subscriber on next listener.
- *
- * @param <T> the type parameter
- * @author RedLi
- * @date 2018 /3/21
- */
 public interface SubscriberListener<T> {
 
     /**

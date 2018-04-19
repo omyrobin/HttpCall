@@ -58,15 +58,11 @@ public class ClientInterceptor implements Interceptor {
         request.newBuilder()
                 .addHeader(BuildConfig.HEADER_CONTENT_TYPE, "application/json; charset=UTF-8")
                 .addHeader(BuildConfig.HEADER_ACCEPT, "application/json")
+                .addHeader(BuildConfig.COOKIE, "123456789")
                 .build();
+
         //响应拦截(头信息获取)
         Response response = chain.proceed(request);
-        //存入Session
-//        if (response.header("Set-Cookie") != null) {
-//            SessionManager.setSession(response.header("Set-Cookie"));
-//        }
-        //刷新API调用时间
-//        SessionManager.setLastApiCallTime(System.currentTimeMillis());
         return response;
     }
 

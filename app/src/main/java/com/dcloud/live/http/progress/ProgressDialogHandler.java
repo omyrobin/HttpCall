@@ -1,4 +1,4 @@
-package com.dcloud.live.http.dialog;
+package com.dcloud.live.http.progress;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -68,10 +68,11 @@ public class ProgressDialogHandler extends Handler {
 
     public void dismiss() {
         context = reference.get();
-        if (dialog != null && dialog.isShowing() && !((Activity) context).isFinishing()) {
-            String name = Thread.currentThread().getName();
-            dialog.dismiss();
-            dialog = null;
+        if(context != null){
+            if (dialog != null && dialog.isShowing() && !((Activity) context).isFinishing()) {
+                dialog.dismiss();
+                dialog = null;
+            }
         }
     }
 

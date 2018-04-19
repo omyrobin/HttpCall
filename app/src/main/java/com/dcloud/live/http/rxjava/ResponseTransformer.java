@@ -27,7 +27,6 @@ public class ResponseTransformer {
                 return upstream.flatMap(new Function<BaseEntity<T>, ObservableSource<T>>() {
                     @Override
                     public ObservableSource<T> apply(BaseEntity<T> tBaseEntity) throws Exception {
-                        //TODO 获取数据,根据状态码判断发送方式
                         if (tBaseEntity.getCode() == ResponseState.SUCCESS_STATE) {
                             return createData(tBaseEntity.getData());
                         } else {

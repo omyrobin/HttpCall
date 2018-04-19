@@ -21,8 +21,8 @@ public interface MainContract {
 
         public abstract void getSpinnerData(String config, String s);
 
-        public abstract void cancelSpinnerData();
+        public abstract void login(String username, String password);
 
-        public abstract void spinnerdata();
+        public abstract void cancel();
     }
 }

@@ -29,11 +29,12 @@ public class MainActivity extends BaseActivity<MainContract.View, MainContract.P
 
 
     public void testApi(View view) {
-        presenter.getSpinnerData("config","zh-CN");
+//        presenter.getSpinnerData("config","zh-CN");
+        presenter.login("wubo", "123456");
     }
 
-    public void cacelApi(View view) {
-        presenter.cancelSpinnerData();
+    public void cancelApi(View view) {
+        presenter.cancel();
     }
 
     @Override
@@ -48,7 +49,6 @@ public class MainActivity extends BaseActivity<MainContract.View, MainContract.P
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        presenter.cancelSpinnerData();
         return super.onKeyDown(keyCode, event);
     }
 }
