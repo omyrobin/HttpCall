@@ -5,7 +5,7 @@ package com.dcloud.live.http.rxjava;
  * Created by wubo on 2018/4/12.
  */
 
-public class ResponseExecption extends Exception {
+public class ResponseExecption extends RuntimeException {
 
     private int code;
 

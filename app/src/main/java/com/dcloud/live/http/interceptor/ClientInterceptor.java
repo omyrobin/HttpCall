@@ -58,7 +58,6 @@ public class ClientInterceptor implements Interceptor {
         request.newBuilder()
                 .addHeader(BuildConfig.HEADER_CONTENT_TYPE, "application/json; charset=UTF-8")
                 .addHeader(BuildConfig.HEADER_ACCEPT, "application/json")
-                .addHeader(BuildConfig.COOKIE, "123456789")
                 .build();
 
         //响应拦截(头信息获取)

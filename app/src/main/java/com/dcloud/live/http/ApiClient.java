@@ -2,8 +2,10 @@ package com.dcloud.live.http;
 
 import android.support.annotation.Nullable;
 
+import com.dcloud.live.App;
 import com.dcloud.live.http.config.BuildConfig;
 import com.dcloud.live.http.config.UrlConfig;
+import com.dcloud.live.http.cookie.CookieManger;
 import com.dcloud.live.http.interceptor.ClientInterceptor;
 
 import java.io.IOException;
@@ -45,22 +47,22 @@ public class ApiClient {
                 builder.readTimeout(BuildConfig.READ_TIMEOUT, TimeUnit.SECONDS);
                 builder.writeTimeout(BuildConfig.WRITETIMEOUT, TimeUnit.SECONDS);
                 //Cookie持久化
-//                builder.cookieJar(new CookieManger(App.getInstance().getApplicationContext()));
+                builder.cookieJar(new CookieManger(App.getInstance().getApplicationContext()));
                 //Cookie
-                builder.cookieJar(new CookieJar() {
-                    private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
-
-                    @Override
-                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                        cookieStore.put(url.host(), cookies);
-                    }
-
-                    @Override
-                    public List<Cookie> loadForRequest(HttpUrl url) {
-                        List<Cookie> cookies = cookieStore.get(url.host());
-                        return cookies != null ? cookies : new ArrayList<Cookie>();
-                    }
-                });
+//                builder.cookieJar(new CookieJar() {
+//                    private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+//
+//                    @Override
+//                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+//                        cookieStore.put(url.host(), cookies);
+//                    }
+//
+//                    @Override
+//                    public List<Cookie> loadForRequest(HttpUrl url) {
+//                        List<Cookie> cookies = cookieStore.get(url.host());
+//                        return cookies != null ? cookies : new ArrayList<Cookie>();
+//                    }
+//                });
                 if (BuildConfig.DEBUG) {
                     //Log信息拦截器
                     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();

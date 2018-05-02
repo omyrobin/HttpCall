@@ -8,10 +8,13 @@ import com.dcloud.live.bean.BaseEntity;
 import com.dcloud.live.http.progress.ProgressCancelListener;
 import com.dcloud.live.http.progress.ProgressDialogHandler;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONException;
 
 import java.io.InterruptedIOException;
+import java.io.NotSerializableException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
@@ -67,6 +70,7 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
             onResponseExecption(context, ((ResponseExecption) e).getCode(), e.getMessage());
             return;
         }
+
         //其它由第三方抛出的异常
         if (e instanceof SocketException) {
             onException(context, ApiException.CONNECT_ERROR);
@@ -74,14 +78,21 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
             // HTTP错误
             onException(context, ApiException.BAD_NETWORK);
         } else if (e instanceof UnknownHostException) {
-            // 连接错误
-            onException(context, ApiException.CONNECT_ERROR);
+            // 无法解析该域名
+            onException(context, ApiException.UNKNOWNHOST_ERROR);
         } else if (e instanceof InterruptedIOException) {
             // 连接超时
             onException(context, ApiException.CONNECT_TIMEOUT);
-        } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
+        } else if (e instanceof JsonParseException
+                || e instanceof JSONException
+                || e instanceof ParseException
+                || e instanceof JsonSerializer
+                || e instanceof NotSerializableException) {
             // 解析错误
             onException(context, ApiException.PARSE_ERROR);
+        } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
+            // 证书错误
+            onException(context, ApiException.SSL_ERROR);
         } else {
             onException(context, ApiException.UNKNOWN_ERROR);
         }
@@ -123,6 +134,9 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
                 break;
             case ApiException.BAD_NETWORK:
                 subscriber.onFail(context.getString(R.string.bad_network));
+                break;
+            case ApiException.UNKNOWNHOST_ERROR:
+                subscriber.onFail(context.getString(R.string.unknownhost_error));
                 break;
             case ApiException.PARSE_ERROR:
                 subscriber.onFail(context.getString(R.string.parse_error));

@@ -62,24 +62,30 @@ public class CookieStore {
 
     public void add(HttpUrl url, Cookie cookie) {
         String name = getCookieToken(cookie);
-        //将cookies缓存到内存中 如果缓存过期 就重置此cookie
-        if (!cookie.persistent()) {
-            if (!cookies.containsKey(url.host())) {
-                cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
-            }
-            cookies.get(url.host()).put(name, cookie);
-        } else {
-            if (cookies.containsKey(url.host())) {
-                cookies.get(url.host()).remove(name);
-            }
+        // 添加 host key. 否则有可能抛空.
+        if (!cookies.containsKey(url.host())) {
+            cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
         }
-
-        //将cookies持久化到本地
-//        SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
-//        prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
-//        prefsWriter.putString(name, encodeCookie(new OkHttpCookies(cookie)));
-//        prefsWriter.apply();
+        // 删除已经有的.
+        if (cookies.containsKey(url.host())) {
+            cookies.get(url.host()).remove(name);
+        }
+        // 添加新的进去
+        cookies.get(url.host()).put(name, cookie);
+        // 是否保存到 SP 中
+        if (cookie.persistent()) {
+            SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
+            prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
+            prefsWriter.putString(name, encodeCookie(new OkHttpCookies(cookie)));
+            prefsWriter.apply();
+        } else {
+            SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
+            prefsWriter.remove(url.host());
+            prefsWriter.remove(name);
+            prefsWriter.apply();
+        }
     }
+
 
     public List<Cookie> get(HttpUrl url) {
         ArrayList<Cookie> ret = new ArrayList<>();

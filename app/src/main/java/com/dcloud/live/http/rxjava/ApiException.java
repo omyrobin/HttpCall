@@ -25,6 +25,11 @@ public class ApiException {
     public static final String BAD_NETWORK = "bad_network";
 
     /**
+     * 未知主机错误
+     */
+    public static final String UNKNOWNHOST_ERROR = "unknownhost_error";
+
+    /**
      * 连接错误
      **/
     public static final String CONNECT_ERROR = "connect_error";
@@ -33,6 +38,11 @@ public class ApiException {
      * 连接超时
      **/
     public static final String CONNECT_TIMEOUT = "connect_timeout";
+
+    /**
+     * 证书错误
+     **/
+    public static final String SSL_ERROR = "ssl_error";
 
     /**
      * section token past due 过期
@@ -49,7 +59,9 @@ public class ApiException {
      **/
     public static final String UNKNOWN_ERROR = "unknown_error";
 
-    @StringDef({PARSE_ERROR, BAD_NETWORK, CONNECT_ERROR, CONNECT_TIMEOUT, TOKEN_PAST_DUE, DATA_ERROR, UNKNOWN_ERROR})
+    @StringDef({PARSE_ERROR, BAD_NETWORK, CONNECT_ERROR,
+            CONNECT_TIMEOUT, TOKEN_PAST_DUE, UNKNOWNHOST_ERROR,
+            DATA_ERROR, SSL_ERROR,UNKNOWN_ERROR})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Error {}
 
