@@ -37,13 +37,6 @@ public class TrustAllCerts implements X509TrustManager {
         return new X509Certificate[0];
     }
 
-    public static class TrustAllHostnameVerifier implements HostnameVerifier {
-        @Override
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
-    }
-
     public static SSLSocketFactory createSSLSocketFactory() {
         SSLSocketFactory ssfFactory = null;
 

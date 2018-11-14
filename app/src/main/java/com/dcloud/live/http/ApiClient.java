@@ -1,7 +1,6 @@
 package com.dcloud.live.http;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.dcloud.live.App;
 import com.dcloud.live.BuildConfig;
@@ -9,18 +8,16 @@ import com.dcloud.live.http.config.OkBuildConfig;
 import com.dcloud.live.http.config.UrlConfig;
 import com.dcloud.live.http.cookie.CookieManger;
 import com.dcloud.live.http.interceptor.ClientInterceptor;
-import com.dcloud.live.http.ssl.TrustAllCerts;
-import com.dcloud.live.http.ssl.TrustMyCerts;
+import com.dcloud.live.http.ssl.TrustDoubleCerts;
+import com.dcloud.live.http.ssl.TrustHostnameVerifier;
+import com.dcloud.live.http.ssl.TrustSingleCerts;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 
 import okhttp3.Authenticator;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -47,15 +44,21 @@ public class ApiClient {
                 OkHttpClient.Builder builder = new OkHttpClient.Builder();
                 //支持信任所有证书https
 //                builder.sslSocketFactory(TrustAllCerts.createSSLSocketFactory(), new TrustAllCerts());
-//                builder.hostnameVerifier(new TrustAllCerts.TrustAllHostnameVerifier());
-                //支持https信任指定服务器的证书
+                //支持https信任指定服务器的证书---单向认证
+//                try {
+//                    SSLContext sslContext =  new TrustSingleCerts().setCertificates(App.getInstance().getAssets().open("lh_server.cer"));
+//                    builder.sslSocketFactory(sslContext.getSocketFactory(),new TrustSingleCerts());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                //双向认证
                 try {
-                    SSLContext sslContext =  new TrustMyCerts().setCertificates(App.getInstance().getAssets().open("lh_server.cer"));
-                    builder.sslSocketFactory(sslContext.getSocketFactory(),new TrustMyCerts());
+                    SSLContext sslContext =  new TrustDoubleCerts().setCertificates(App.getInstance().getAssets().open("lh_server.cer"));
+                    builder.sslSocketFactory(sslContext.getSocketFactory(),new TrustDoubleCerts());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                builder.hostnameVerifier(new TrustMyCerts.TrustMyHostnameVerifier());
+                builder.hostnameVerifier(new TrustHostnameVerifier());
                 //应用拦截器设置
                 builder.addInterceptor(new ClientInterceptor());
                 //登录头信息补充
