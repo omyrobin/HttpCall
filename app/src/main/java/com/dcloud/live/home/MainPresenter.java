@@ -1,6 +1,7 @@
 package com.dcloud.live.home;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.dcloud.live.bean.SpinnerData;
@@ -23,17 +24,6 @@ public class MainPresenter extends MainContract.Presenter {
 
     @Override
     public void getSpinnerData(String config, String language) {
-        mModel.getSpinnerData(config, language, new ProgressObserver<>(mView.getContext(), new SubscriberListener<SpinnerData>() {
-            @Override
-            public void onSuccess(SpinnerData spinnerData) {
-
-            }
-
-            @Override
-            public void onFail(String err) {
-                Toast.makeText(mView.getContext(), err, Toast.LENGTH_SHORT).show();
-            }
-        }));
     }
 
     @Override

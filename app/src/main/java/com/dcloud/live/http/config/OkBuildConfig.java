@@ -4,7 +4,7 @@ package com.dcloud.live.http.config;
  * Created by wubo on 2018/4/9.
  */
 
-public class BuildConfig {
+public class OkBuildConfig {
     public static boolean DEBUG = true;
     public static final String HEADER_CONTENT_TYPE = "Content-Type";
     public static final String HEADER_ACCEPT = "Accept";

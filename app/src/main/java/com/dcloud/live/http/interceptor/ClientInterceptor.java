@@ -2,7 +2,7 @@ package com.dcloud.live.http.interceptor;
 
 import android.util.Log;
 
-import com.dcloud.live.http.config.BuildConfig;
+import com.dcloud.live.http.config.OkBuildConfig;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -56,8 +56,8 @@ public class ClientInterceptor implements Interceptor {
         }
 
         request.newBuilder()
-                .addHeader(BuildConfig.HEADER_CONTENT_TYPE, "application/json; charset=UTF-8")
-                .addHeader(BuildConfig.HEADER_ACCEPT, "application/json")
+                .addHeader(OkBuildConfig.HEADER_CONTENT_TYPE, "application/json; charset=UTF-8")
+                .addHeader(OkBuildConfig.HEADER_ACCEPT, "application/json")
                 .build();
 
         //响应拦截(头信息获取)

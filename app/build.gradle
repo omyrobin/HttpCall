@@ -20,7 +20,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+//    productFlavors{
+//        baidu{
+//            buildConfigField 'String','WEB_URL','"http://www.baidu.com"'
+//        }
+//    }
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -48,4 +56,15 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     // 注解
     compile 'com.android.support:support-annotations:27.1.1'
+}
+
+task demo{
+    def srcDirs = 'app/src/main/java/com/dcloud/live/'
+    def dir = new File(srcDirs)
+    if (dir.isDirectory()) {
+        dir.eachFileRecurse { file ->
+            if(file.name.matches(~'.*\\.java$'))
+                println file.name
+        }
+    }
 }

@@ -6,5 +6,5 @@ package com.dcloud.live.http.config;
 
 public class UrlConfig {
 //    public static final String BASEURL = "http://106.39.33.2:7070/api/";
-    public static final String BASEURL = "http://192.168.10.169:8080/";
+    public static final String BASEURL = "https://192.168.10.169:8443/";
 }

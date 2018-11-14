@@ -72,12 +72,14 @@ public abstract class BaseActivity<V extends BaseView,T extends BasePresenter<V>
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.attach((V)this);
+        if(presenter !=null)
+            presenter.attach((V)this);
     }
 
     @Override
     protected void onStop() {
-        presenter.dettach();
+        if(presenter !=null)
+            presenter.dettach();
         super.onStop();
     }
 

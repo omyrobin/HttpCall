@@ -5,6 +5,9 @@
     <string name="connect_timeout">连接超时,请稍后再试</string>
     <string name="bad_network">服务器异常</string>
     <string name="parse_error">解析服务器响应数据失败</string>
+    <string name="ssl_error">无法识别证书</string>
+    <string name="ssl_peer_unverified_error">未经证实的证书</string>
+    <string name="unknownhost_error">无法解析该主机域名</string>
     <string name="unknown_error">未知错误</string>
     <string name="response_return_error">服务器返回数据失败</string>
 </resources>

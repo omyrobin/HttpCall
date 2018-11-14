@@ -2,6 +2,8 @@ package com.dcloud.live.http.rxjava;
 
 import android.content.Context;
 import android.net.ParseException;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.dcloud.live.R;
 import com.dcloud.live.bean.BaseEntity;
@@ -65,9 +67,11 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+        Log.i("ERR", e.toString());
+        dismissDialog();
         // 数据返回非正确状态码
         if (e instanceof ResponseExecption) {
-            onResponseExecption(context, ((ResponseExecption) e).getCode(), e.getMessage());
+            onResponseExecption(context, ((ResponseExecption)e).getCode(), ((ResponseExecption)e).getMsg());
             return;
         }
 
@@ -83,20 +87,18 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
         } else if (e instanceof InterruptedIOException) {
             // 连接超时
             onException(context, ApiException.CONNECT_TIMEOUT);
-        } else if (e instanceof JsonParseException
-                || e instanceof JSONException
-                || e instanceof ParseException
-                || e instanceof JsonSerializer
-                || e instanceof NotSerializableException) {
+        } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException || e instanceof JsonSerializer || e instanceof NotSerializableException) {
             // 解析错误
             onException(context, ApiException.PARSE_ERROR);
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
             // 证书错误
             onException(context, ApiException.SSL_ERROR);
-        } else {
+        } else if(e instanceof javax.net.ssl.SSLPeerUnverifiedException){
+            // 未经证实的证书错误
+            onException(context, ApiException.SSL_PEER_UNVERIFIED_ERROR);
+        }else {
             onException(context, ApiException.UNKNOWN_ERROR);
         }
-        dismissDialog();
     }
 
     @Override
@@ -140,6 +142,12 @@ public class ProgressObserver<T extends BaseEntity> implements Observer<T> {
                 break;
             case ApiException.PARSE_ERROR:
                 subscriber.onFail(context.getString(R.string.parse_error));
+                break;
+            case ApiException.SSL_ERROR:
+                subscriber.onFail(context.getString(R.string.ssl_error));
+                break;
+            case ApiException.SSL_PEER_UNVERIFIED_ERROR:
+                subscriber.onFail(context.getString(R.string.ssl_peer_unverified_error));
                 break;
             default:
                 subscriber.onFail(context.getString(R.string.unknown_error));

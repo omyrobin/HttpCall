@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * @author RedLi
+ * @author wubo
  * @date 2018/3/21
  * <p>
  * 请求失败的原因
@@ -45,6 +45,11 @@ public class ApiException {
     public static final String SSL_ERROR = "ssl_error";
 
     /**
+     * 未经证实的证书错误
+     **/
+    public static final String SSL_PEER_UNVERIFIED_ERROR = "ssl_peer_unverified_error";
+
+    /**
      * section token past due 过期
      **/
     public static final String TOKEN_PAST_DUE = "token_past_due";
@@ -61,9 +66,10 @@ public class ApiException {
 
     @StringDef({PARSE_ERROR, BAD_NETWORK, CONNECT_ERROR,
             CONNECT_TIMEOUT, TOKEN_PAST_DUE, UNKNOWNHOST_ERROR,
-            DATA_ERROR, SSL_ERROR,UNKNOWN_ERROR})
+            DATA_ERROR, SSL_ERROR, SSL_PEER_UNVERIFIED_ERROR, UNKNOWN_ERROR})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Error {}
+    public @interface Error {
+    }
 
 
 }

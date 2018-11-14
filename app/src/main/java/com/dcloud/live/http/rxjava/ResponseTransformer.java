@@ -2,6 +2,7 @@ package com.dcloud.live.http.rxjava;
 
 
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.dcloud.live.bean.BaseEntity;
 
@@ -16,7 +17,6 @@ import io.reactivex.schedulers.Schedulers;
 public class ResponseTransformer {
     /**
      * 对结果进行Transformer处理
-     *
      * @param <T>
      * @return
      */
